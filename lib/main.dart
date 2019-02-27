@@ -55,6 +55,7 @@ class _Game extends State<Game> {
 
   select(int color) {
     if (board[0][0] == color) return false;
+    if (completed()) return false;
     setState(() {
       moves += 1;
     });
@@ -78,6 +79,16 @@ class _Game extends State<Game> {
     if (r - 1 >= 0 && board[c][r - 1] == oldColor) {
       paint(c, r - 1, color);
     }
+  }
+
+  completed() {
+    int color = board[0][0];
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        if (color != board[i][j]) return false;
+      }
+    }
+    return true;
   }
 
   @override
@@ -106,12 +117,20 @@ class _Game extends State<Game> {
           children: <Widget>[
             Flexible(
               child: GridView.count(
+                  primary: false,
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
                   crossAxisCount: size,
                   children: board
                       .expand((pair) => pair)
                       .toList()
-                      .map((int v) =>
-                          GridTile(child: Container(color: colors[v])))
+                      .map(
+                        (int v) => GridTile(
+                              child: Container(
+                                color: colors[v],
+                              ),
+                            ),
+                      )
                       .toList()),
             ),
             Column(
