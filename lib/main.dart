@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +61,7 @@ class _Game extends State<Game> {
       moves += 1;
     });
     paint(0, 0, color);
+    Flame.audio.play('water.mp3');
   }
 
   paint(int c, int r, int color) {
@@ -107,6 +109,7 @@ class _Game extends State<Game> {
         elevation: 0,
         actions: <Widget>[
           IconButton(icon: Icon(Icons.help), onPressed: null),
+          IconButton(icon: Icon(Icons.format_list_numbered), onPressed: null),
           IconButton(icon: Icon(Icons.refresh), onPressed: () => generate())
         ],
       ),
