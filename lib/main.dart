@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:flame/flame.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,7 @@ class App extends StatelessWidget {
         future: SystemChrome.setPreferredOrientations(
             [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]),
         builder: (BuildContext context, _) {
-          return MaterialApp(title: 'Flood', home: Game());
+          return MaterialApp(home: Game());
         });
   }
 }
@@ -26,8 +25,8 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
-  final int size = 10;
-  final List<Color> colors = [
+  int size = 10;
+  List<Color> colors = [
     Colors.red,
     Colors.blue,
     Colors.green,
@@ -54,14 +53,14 @@ class _Game extends State<Game> {
     });
   }
 
-  select(int color) {
+  select(int color) async {
     if (board[0][0] == color) return false;
     if (completed()) return false;
     setState(() {
       moves += 1;
     });
     paint(0, 0, color);
-    Flame.audio.play('water.mp3');
+    if (completed()) dialog(Text("You have won in just $moves moves"));
   }
 
   paint(int c, int r, int color) {
@@ -69,29 +68,21 @@ class _Game extends State<Game> {
     setState(() {
       board[c][r] = color;
     });
-    if (c - 1 >= 0 && board[c - 1][r] == oldColor) {
-      paint(c - 1, r, color);
-    }
-    if (r + 1 < size && board[c][r + 1] == oldColor) {
-      paint(c, r + 1, color);
-    }
-    if (c + 1 < size && board[c + 1][r] == oldColor) {
-      paint(c + 1, r, color);
-    }
-    if (r - 1 >= 0 && board[c][r - 1] == oldColor) {
-      paint(c, r - 1, color);
-    }
+    if (c - 1 >= 0 && board[c - 1][r] == oldColor) paint(c - 1, r, color);
+    if (r + 1 < size && board[c][r + 1] == oldColor) paint(c, r + 1, color);
+    if (c + 1 < size && board[c + 1][r] == oldColor) paint(c + 1, r, color);
+    if (r - 1 >= 0 && board[c][r - 1] == oldColor) paint(c, r - 1, color);
   }
 
   completed() {
     int color = board[0][0];
-    for (int i = 0; i < size; i++) {
-      for (int j = 0; j < size; j++) {
-        if (color != board[i][j]) return false;
-      }
-    }
+    for (int i = 0; i < size; i++)
+      for (int j = 0; j < size; j++) if (color != board[i][j]) return false;
     return true;
   }
+
+  dialog(w) =>
+      showDialog(context: context, builder: (_) => AlertDialog(content: w));
 
   @override
   void initState() {
@@ -108,8 +99,8 @@ class _Game extends State<Game> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.help), onPressed: null),
-          IconButton(icon: Icon(Icons.format_list_numbered), onPressed: null),
+          IconButton(
+              icon: Icon(Icons.help), onPressed: () => dialog(Text('Help'))),
           IconButton(icon: Icon(Icons.refresh), onPressed: () => generate())
         ],
       ),
@@ -127,30 +118,17 @@ class _Game extends State<Game> {
                   children: board
                       .expand((pair) => pair)
                       .toList()
-                      .map(
-                        (int v) => GridTile(
-                              child: Container(
-                                color: colors[v],
-                              ),
-                            ),
-                      )
+                      .map((int v) =>
+                          GridTile(child: Container(color: colors[v])))
                       .toList()),
             ),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Flexible(child: Text('Moves', style: TextStyle(fontSize: 18))),
                 Flexible(
-                  child: Text(
-                    'Moves',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-                Flexible(
-                  child: Text(
-                    moves.toString(),
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
+                    child:
+                        Text(moves.toString(), style: TextStyle(fontSize: 24))),
               ],
             ),
             Row(
@@ -159,12 +137,11 @@ class _Game extends State<Game> {
                 return ButtonTheme(
                   minWidth: 32,
                   child: RaisedButton(
-                    elevation: 0,
-                    color: color,
-                    shape: new CircleBorder(),
-                    onPressed: () =>
-                        select(colors.indexWhere((_color) => _color == color)),
-                  ),
+                      elevation: 0,
+                      color: color,
+                      shape: new CircleBorder(),
+                      onPressed: () => select(
+                          colors.indexWhere((_color) => _color == color))),
                 );
               }).toList(),
             )
