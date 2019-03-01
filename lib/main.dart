@@ -12,7 +12,7 @@ class App extends StatelessWidget {
         future: SystemChrome.setPreferredOrientations(
             [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]),
         builder: (BuildContext context, _) {
-          return MaterialApp(home: Game());
+          return MaterialApp(home: Game(), debugShowCheckedModeBanner: false);
         });
   }
 }
@@ -25,7 +25,7 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
-  int size = 10;
+  int size = 14;
   List<Color> colors = [
     Colors.red,
     Colors.blue,
@@ -60,7 +60,11 @@ class _Game extends State<Game> {
       moves += 1;
     });
     paint(0, 0, color);
-    if (completed()) dialog(Text("You have won in just $moves moves"));
+    if (completed())
+      dialog(Column(mainAxisSize: MainAxisSize.min, children: [
+        Icon(Icons.sentiment_satisfied, size: 48),
+        text("YOU WIN")
+      ]));
   }
 
   paint(int c, int r, int color) {
@@ -81,6 +85,8 @@ class _Game extends State<Game> {
     return true;
   }
 
+  text(s, [f = 14.0]) => Text(s, style: TextStyle(fontSize: f));
+
   dialog(w) =>
       showDialog(context: context, builder: (_) => AlertDialog(content: w));
 
@@ -100,7 +106,9 @@ class _Game extends State<Game> {
         elevation: 0,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.help), onPressed: () => dialog(Text('Help'))),
+              icon: Icon(Icons.help),
+              onPressed: () => dialog(
+                  Image.asset('assets/images/help.png', fit: BoxFit.contain))),
           IconButton(icon: Icon(Icons.refresh), onPressed: () => generate())
         ],
       ),
@@ -109,6 +117,15 @@ class _Game extends State<Game> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: Column(
+                children: <Widget>[
+                  text('MOVES', 18.0),
+                  text(moves.toString(), 28.0),
+                ],
+              ),
+            ),
             Flexible(
               child: GridView.count(
                   primary: false,
@@ -121,15 +138,6 @@ class _Game extends State<Game> {
                       .map((int v) =>
                           GridTile(child: Container(color: colors[v])))
                       .toList()),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Flexible(child: Text('Moves', style: TextStyle(fontSize: 18))),
-                Flexible(
-                    child:
-                        Text(moves.toString(), style: TextStyle(fontSize: 24))),
-              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
