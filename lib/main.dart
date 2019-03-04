@@ -7,21 +7,16 @@ void main() => runApp(App());
 
 class App extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: SystemChrome.setPreferredOrientations(
-            [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]),
-        builder: (BuildContext context, _) {
-          return MaterialApp(home: Game(), debugShowCheckedModeBanner: false);
-        });
-  }
+  Widget build(BuildContext context) => FutureBuilder(
+      future: SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]),
+      builder: (BuildContext context, _) =>
+          MaterialApp(home: Game(), debugShowCheckedModeBanner: false));
 }
 
 class Game extends StatefulWidget {
   @override
-  _Game createState() {
-    return _Game();
-  }
+  _Game createState() => _Game();
 }
 
 class _Game extends State<Game> {
@@ -41,9 +36,7 @@ class _Game extends State<Game> {
     Random random = new Random.secure();
     for (int i = 0; i < size; i++) {
       List<int> r = [];
-      for (int j = 0; j < size; j++) {
-        r.add(random.nextInt(colors.length));
-      }
+      for (int j = 0; j < size; j++) r.add(random.nextInt(colors.length));
       _board.add(r);
     }
     setState(() {
@@ -63,12 +56,11 @@ class _Game extends State<Game> {
         Icon(Icons.sentiment_satisfied, size: 48),
         text("YOU WIN")
       ]));
-    if (loosed()) {
+    if (loosed())
       dialog(Column(mainAxisSize: MainAxisSize.min, children: [
         Icon(Icons.sentiment_dissatisfied, size: 48),
         text("YOU LOOSE")
       ]));
-    }
   }
 
   paint(int c, int r, int color) {
@@ -147,16 +139,16 @@ class _Game extends State<Game> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: colors.map((color) {
-                return ButtonTheme(
-                    minWidth: 32,
-                    child: RaisedButton(
-                        elevation: 0,
-                        color: color,
-                        shape: new CircleBorder(),
-                        onPressed: () => select(
-                            colors.indexWhere((_color) => _color == color))));
-              }).toList(),
+              children: colors
+                  .map((color) => ButtonTheme(
+                      minWidth: 32,
+                      child: RaisedButton(
+                          elevation: 0,
+                          color: color,
+                          shape: CircleBorder(),
+                          onPressed: () => select(
+                              colors.indexWhere((_color) => _color == color)))))
+                  .toList(),
             )
           ],
         ),
