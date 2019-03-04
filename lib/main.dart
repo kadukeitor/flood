@@ -20,7 +20,7 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
-  int size = 14, moves = 0, max = 30;
+  int size = 14, max = 30, moves = 0;
   List<Color> colors = [
     Colors.red,
     Colors.blue,
