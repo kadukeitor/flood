@@ -25,7 +25,7 @@ class Game extends StatefulWidget {
 }
 
 class _Game extends State<Game> {
-  int size = 14;
+  int size = 14, moves = 0, max = 30;
   List<Color> colors = [
     Colors.red,
     Colors.blue,
@@ -35,7 +35,6 @@ class _Game extends State<Game> {
     Colors.yellow,
   ];
   List<List<int>> board = [];
-  int moves = 0;
 
   generate() {
     List<List<int>> _board = [];
@@ -54,8 +53,7 @@ class _Game extends State<Game> {
   }
 
   select(int color) async {
-    if (board[0][0] == color) return false;
-    if (completed()) return false;
+    if (board[0][0] == color || completed() || loosed()) return false;
     setState(() {
       moves += 1;
     });
@@ -65,6 +63,12 @@ class _Game extends State<Game> {
         Icon(Icons.sentiment_satisfied, size: 48),
         text("YOU WIN")
       ]));
+    if (loosed()) {
+      dialog(Column(mainAxisSize: MainAxisSize.min, children: [
+        Icon(Icons.sentiment_dissatisfied, size: 48),
+        text("YOU LOOSE")
+      ]));
+    }
   }
 
   paint(int c, int r, int color) {
@@ -77,6 +81,8 @@ class _Game extends State<Game> {
     if (c + 1 < size && board[c + 1][r] == oldColor) paint(c + 1, r, color);
     if (r - 1 >= 0 && board[c][r - 1] == oldColor) paint(c, r - 1, color);
   }
+
+  loosed() => moves >= max;
 
   completed() {
     int color = board[0][0];
@@ -122,7 +128,7 @@ class _Game extends State<Game> {
               child: Column(
                 children: <Widget>[
                   text('MOVES', 18.0),
-                  text(moves.toString(), 28.0),
+                  text(moves.toString() + '/' + max.toString(), 28.0)
                 ],
               ),
             ),
@@ -143,14 +149,13 @@ class _Game extends State<Game> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: colors.map((color) {
                 return ButtonTheme(
-                  minWidth: 32,
-                  child: RaisedButton(
-                      elevation: 0,
-                      color: color,
-                      shape: new CircleBorder(),
-                      onPressed: () => select(
-                          colors.indexWhere((_color) => _color == color))),
-                );
+                    minWidth: 32,
+                    child: RaisedButton(
+                        elevation: 0,
+                        color: color,
+                        shape: new CircleBorder(),
+                        onPressed: () => select(
+                            colors.indexWhere((_color) => _color == color))));
               }).toList(),
             )
           ],
