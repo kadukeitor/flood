@@ -106,8 +106,7 @@ class _Game extends State<Game> {
   }
 
   @override
-  Widget build(BuildContext ctx) {
-    return Scaffold(
+  Widget build(BuildContext ctx) => Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         brightness: Platform.isIOS ? Brightness.light : Brightness.dark,
@@ -121,48 +120,42 @@ class _Game extends State<Game> {
           IconButton(icon: Icon(Icons.refresh), onPressed: () => gen())
         ],
       ),
-      body: pad(
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              children: [
-                txt('MOVES', 18.0),
-                txt(moves.toString() + '/' + max.toString(), 28.0)
-              ],
-            ),
-            Flexible(
-                child: pad(GridView.count(
-                    primary: false,
-                    mainAxisSpacing: 2,
-                    crossAxisSpacing: 2,
-                    crossAxisCount: size,
-                    children: board
-                        .expand((pair) => pair)
-                        .toList()
-                        .map((int v) =>
-                            GridTile(child: Container(color: colors[v])))
-                        .toList()))),
-            pad(Column(children: [
-              txt('HIGH SCORE', 16.0),
-              txt((best ?? '-').toString(), 20.0)
-            ])),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: colors
-                  .map((color) => ButtonTheme(
-                      minWidth: 32,
-                      child: RaisedButton(
-                          elevation: 0,
-                          color: color,
-                          shape: CircleBorder(),
-                          onPressed: () => sel(
-                              colors.indexWhere((_color) => _color == color)))))
-                  .toList(),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+      body: pad(Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(children: [
+            txt('MOVES'),
+            txt(moves.toString() + '/' + max.toString(), 28.0)
+          ]),
+          Flexible(
+              child: pad(GridView.count(
+                  primary: false,
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
+                  crossAxisCount: size,
+                  children: board
+                      .expand((pair) => pair)
+                      .toList()
+                      .map((int v) =>
+                          GridTile(child: Container(color: colors[v])))
+                      .toList()))),
+          pad(Column(children: [
+            txt('HIGH SCORE'),
+            txt((best ?? '-').toString(), 24.0)
+          ])),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: colors
+                .map((color) => ButtonTheme(
+                    minWidth: 32,
+                    child: RaisedButton(
+                        elevation: 0,
+                        color: color,
+                        shape: CircleBorder(),
+                        onPressed: () => sel(
+                            colors.indexWhere((_color) => _color == color)))))
+                .toList(),
+          )
+        ],
+      )));
 }
