@@ -30,6 +30,11 @@ to `portrait`.
 - Push high score to remote list (using Firebase).
 - Block's board animations (using Flare).
 
+## Scripts
+
+- Get code size: `./size.sh`
+- Generate new launcher icons: `./icons.sh`
+
 ## License
 
 MIT
