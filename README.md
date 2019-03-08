@@ -2,6 +2,8 @@
 
 The tide is coming
 
+![Alt text](assets/images/screenshot.png?raw=true "Flood")
+
 ## How to play
 
 Use the buttons to change colors from the color on the top left corner.
