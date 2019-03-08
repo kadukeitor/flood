@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'dart:math';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(App());
@@ -31,79 +32,6 @@ class _Game extends State<Game> {
     Colors.yellow,
   ];
   List<List<int>> brd = [];
-
-  gen() {
-    List<List<int>> _brd = [];
-    Random random = new Random.secure();
-    for (int i = 0; i < size; i++) {
-      List<int> r = [];
-      for (int j = 0; j < size; j++) r.add(random.nextInt(colors.length));
-      _brd.add(r);
-    }
-    setState(() {
-      moves = 0;
-      brd = _brd;
-    });
-  }
-
-  sel(int color) {
-    if (brd[0][0] == color || win() || los()) return false;
-    setState(() {
-      moves += 1;
-    });
-    pnt(0, 0, color);
-    if (win())
-      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(Icons.sentiment_satisfied, size: 48),
-        txt("YOU WIN")
-      ]));
-    else if (los())
-      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(Icons.sentiment_dissatisfied, size: 48),
-        txt("YOU LOSE")
-      ]));
-  }
-
-  pnt(int c, int r, int color) {
-    int oldColor = brd[c][r];
-    setState(() {
-      brd[c][r] = color;
-    });
-    if (c - 1 >= 0 && brd[c - 1][r] == oldColor) pnt(c - 1, r, color);
-    if (r + 1 < size && brd[c][r + 1] == oldColor) pnt(c, r + 1, color);
-    if (c + 1 < size && brd[c + 1][r] == oldColor) pnt(c + 1, r, color);
-    if (r - 1 >= 0 && brd[c][r - 1] == oldColor) pnt(c, r - 1, color);
-  }
-
-  los() => moves >= max;
-
-  prf() => SharedPreferences.getInstance();
-
-  win() {
-    int color = brd[0][0];
-    for (int i = 0; i < size; i++)
-      for (int j = 0; j < size; j++) if (color != brd[i][j]) return false;
-    if (best == null || moves < best) {
-      setState(() => best = moves);
-      prf().then((prefs) => prefs.setInt('best', moves));
-    }
-    return true;
-  }
-
-  pad(c, [p = 8.0]) => Padding(padding: EdgeInsets.all(p), child: c);
-
-  txt(s, [f = 14.0]) =>
-      Text(s, style: TextStyle(fontSize: f, color: Colors.black));
-
-  dlg(w) =>
-      showDialog(context: context, builder: (_) => AlertDialog(content: w));
-
-  @override
-  void initState() {
-    super.initState();
-    gen();
-    prf().then((prefs) => setState(() => best = prefs.get('best')));
-  }
 
   @override
   Widget build(BuildContext ctx) => Scaffold(
@@ -158,4 +86,77 @@ class _Game extends State<Game> {
           )
         ],
       )));
+
+  dlg(w) =>
+      showDialog(context: context, builder: (_) => AlertDialog(content: w));
+
+  gen() {
+    List<List<int>> _brd = [];
+    Random random = new Random.secure();
+    for (int i = 0; i < size; i++) {
+      List<int> r = [];
+      for (int j = 0; j < size; j++) r.add(random.nextInt(colors.length));
+      _brd.add(r);
+    }
+    setState(() {
+      moves = 0;
+      brd = _brd;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    gen();
+    prf().then((prefs) => setState(() => best = prefs.get('best')));
+  }
+
+  los() => moves >= max;
+
+  pad(c, [p = 8.0]) => Padding(padding: EdgeInsets.all(p), child: c);
+
+  pnt(int c, int r, int color) {
+    int oldColor = brd[c][r];
+    setState(() {
+      brd[c][r] = color;
+    });
+    if (c - 1 >= 0 && brd[c - 1][r] == oldColor) pnt(c - 1, r, color);
+    if (r + 1 < size && brd[c][r + 1] == oldColor) pnt(c, r + 1, color);
+    if (c + 1 < size && brd[c + 1][r] == oldColor) pnt(c + 1, r, color);
+    if (r - 1 >= 0 && brd[c][r - 1] == oldColor) pnt(c, r - 1, color);
+  }
+
+  prf() => SharedPreferences.getInstance();
+
+  sel(int color) {
+    if (brd[0][0] == color || win() || los()) return false;
+    setState(() {
+      moves += 1;
+    });
+    pnt(0, 0, color);
+    if (win())
+      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
+        Icon(Icons.sentiment_satisfied, size: 48),
+        txt("YOU WIN")
+      ]));
+    else if (los())
+      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
+        Icon(Icons.sentiment_dissatisfied, size: 48),
+        txt("YOU LOSE")
+      ]));
+  }
+
+  txt(s, [f = 14.0]) =>
+      Text(s, style: TextStyle(fontSize: f, color: Colors.black));
+
+  win() {
+    int color = brd[0][0];
+    for (int i = 0; i < size; i++)
+      for (int j = 0; j < size; j++) if (color != brd[i][j]) return false;
+    if (best == null || moves < best) {
+      setState(() => best = moves);
+      prf().then((prefs) => prefs.setInt('best', moves));
+    }
+    return true;
+  }
 }
