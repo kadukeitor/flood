@@ -9,11 +9,8 @@ void main() => runApp(App());
 
 class App extends StatelessWidget {
   @override
-  Widget build(ctx) => FutureBuilder(
-      future: SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]),
-      builder: (ctx, _) =>
-          MaterialApp(home: Game(), debugShowCheckedModeBanner: false));
+  Widget build(ctx) =>
+      MaterialApp(home: Game(), debugShowCheckedModeBanner: false);
 }
 
 class Game extends StatefulWidget {
