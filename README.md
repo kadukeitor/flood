@@ -6,15 +6,17 @@ The tide is coming
 
 ## How to play
 
-Use the buttons to change colors from the color on the top left corner.  
-Fill the board with a single color in less than 30 moves to win the game.
+The goal of the game is to fill the board with a single color in less than 30 moves.  
+The game starts a the top left corner of the board and you can chose any color at the bottom to match as much squares as possible in a single play.
 
-## Description
+## Project Description
 
-Flood is intended to be played in Android and iOS, it's 100% written with Flutter base code, 
-there is just one package imported (shared_preferences) that allow users to store their high scores 
-in the device. The code was reformatted with `dartfmt` and the orientation on the device is locked 
-to `portrait`.  
+Flood is a minimalistic application (less than 5k) written in Flutter intended to be played in Android and iOS.
+
+## Technical Details
+- Just one package imported (shared_preferences) that allow users to store their high scores
+- Reformatted with `dartfmt` 
+- Orientation locked to `portrait`.  
 
 ## Features
 
@@ -25,10 +27,15 @@ to `portrait`.
 
 ## To do (not enough with 5K)
 
-- Tests (sorry :-()
-- High score list (top 10).
-- Push high score to remote list (using Firebase).
-- Board animations (using Flare).
+- Board animations (using Flare)
+- Timer
+- More granular scoring system (combining time & moves)
+- User's high score list
+- Sounds
+- i18n
+- Color schemes
+- Online high score board (remote list using Firebase)
+- Tests :-(
 
 ## Scripts
 
