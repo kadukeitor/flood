@@ -6,7 +6,7 @@ The tide is coming
 
 ## How to play
 
-The goal of the game is to fill the board with a single color in less than 30 moves.
+The goal of the game is to fill the board with a single color in less than 30 moves.  
 The game starts a the top left corner of the board and you can chose any color at the bottom to match as much squares as possible in a single play.
 
 ## Project Description
