@@ -71,15 +71,9 @@ class _Game extends State<Game> {
     });
     pnt(0, 0, color);
     if (win())
-      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(Icons.sentiment_satisfied, size: 48),
-        txt("YOU WIN")
-      ]));
+      dlg(Image.asset('assets/images/win.png', fit: BoxFit.contain));
     else if (los())
-      dlg(Column(mainAxisSize: MainAxisSize.min, children: [
-        Icon(Icons.sentiment_dissatisfied, size: 48),
-        txt("YOU LOSE")
-      ]));
+      dlg(Image.asset('assets/images/lost.png', fit: BoxFit.contain));
   }
 
   txt(s, [f = 14.0]) =>
