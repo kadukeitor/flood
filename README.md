@@ -7,11 +7,13 @@ The tide is coming
 ## How to play
 
 The goal of the game is to fill the board with a single color in less than 30 moves.  
-The game starts a the top left corner of the board and you can chose any color at the bottom to match as much squares as possible in a single play.
+The game starts a the top left corner of the board  
+and you can choose any color at the bottom to match as much squares as possible in a single play.
 
 ## Project Description
 
-Flood is a minimalistic application (less than 5k) written in Flutter intended to be played in Android and iOS.
+Flood is a minimalistic application (less than 5k) written in Flutter  
+intended to be played in Android and iOS.
 
 ## Technical Details
 - Just one package imported (shared_preferences) that allow users to store their high scores.
